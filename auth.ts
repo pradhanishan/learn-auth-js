@@ -4,7 +4,6 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { getUserById } from "./data/user";
 import { db } from "./lib/db";
 
-
 export const {
   handlers: { GET, POST },
   auth,
@@ -12,6 +11,15 @@ export const {
   signOut,
 } = NextAuth({
   callbacks: {
+    async signIn({ user }) {
+      const existingUser = await getUserById(user.id);
+
+      // if (!existingUser || !existingUser?.emailVerified) {
+      //   return false;
+      // }
+
+      return true;
+    },
     async session({ token, session }) {
       console.log({ sessionToken: token });
 
